@@ -1,0 +1,5 @@
+static char *square[] = {
+"1 1 1 1 ",
+"0 c #aaffffff",
+"0"
+};

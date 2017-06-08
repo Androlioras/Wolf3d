@@ -1,0 +1,6 @@
+air			0	0	0	255	255	NULL
+stone		500	64	64	64	0	textures/stone.xpm
+glass		500	255	255	0	0	textures/glass.xpm
+wood		500	0	255	255	0	textures/wood.xpm
+unicorn		500	0	255	255	0	textures/unicorn_2.xpm
+salameche	500	0	0	0	0	textures/salameche.xpm

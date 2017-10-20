@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/23 16:54:38 by pribault          #+#    #+#             */
-/*   Updated: 2017/05/23 18:09:24 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 19:03:48 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	fill_array(t_env *env, char *line, int fd, t_uchar n)
 	{
 		params = ft_strsplit(line, '\t');
 		if (ft_arraylen(params) != 7)
-			ft_exit(env, 1);
+			exit(1);
 		env->blocks[n].name = ft_strdup(params[0]);
 		env->blocks[n].h = ft_atoi(params[1]);
 		env->blocks[n].color = smlx_create_color(ft_atoi(params[2]),
@@ -32,8 +32,9 @@ void	fill_array(t_env *env, char *line, int fd, t_uchar n)
 			env->blocks[n].texture = NULL;
 		ft_free_array((void**)params, 8);
 		free(line);
-		env->blocks[0].h = ++n;
+		n++;
 	}
+	env->blocks[n].name = NULL;
 	free(line);
 }
 
@@ -42,7 +43,7 @@ void	free_blocks(t_env *env)
 	t_uchar	n;
 
 	n = 0;
-	while (n < env->blocks[0].h)
+	while (env->blocks[n].name)
 	{
 		free(env->blocks[n].name);
 		if (env->blocks[n].texture)

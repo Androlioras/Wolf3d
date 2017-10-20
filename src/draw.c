@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 14:47:58 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 16:12:19 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 17:10:07 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,15 @@ int		ft_draw(t_env *env)
 	ft_keys(env);
 	mlx_clear_window(env->win.mlx, env->win.win);
 	smlx_clear_image(env->img);
-	if (!(env->where & 4))
-		mlx_put_image_to_window(env->win.mlx, env->win.win,
-		env->back->img, 0, 0);
-	if (env->where & 1)
-		draw_multithread(env, (void*)&draw_wolf);
-	if (env->where & 4)
-		draw_multithread(env, (void*)&draw_editor);
-	if (env->where & 2)
-		draw_menu(env);
+	smlx_clear_image(env->img2);
+	mlx_put_image_to_window(env->win.mlx, env->win.win, env->back->img, 0, 0);
+	draw_multithread(env, (void*)&draw_wolf);
 	mlx_put_image_to_window(env->win.mlx, env->win.win,
 	env->img->img, 0, 0);
-	printf("\033[1A\033[Kangle: %fpi | x=%f y=%f | where=%x | fps: %d\n",
-	env->cam.angle / PI, env->cam.x, env->cam.y, env->where, smlx_get_fps());
+	mlx_put_image_to_window(env->win.mlx, env->win.win,
+	env->img2->img, 0, 0);
+	ft_printf("\033[1A\033[Kangle: %d degrés | x=%d y=%d | fps: %d\n",
+	(int)(env->cam.angle * 180 / PI), (int)env->cam.x, (int)env->cam.y,
+	smlx_get_fps());
 	return (0);
 }

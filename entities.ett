@@ -1,2 +1,11 @@
-unicorn		500	0	0	0	0	textures/unicorn_2.xpm
-salameche	500	0	0	0	0	textures/salameche.xpm
+unicorn		500		0		0	0	0	0	textures/unicorn_2.xpm
+salameche	500		0		0	0	0	0	textures/salameche.xpm
+pharaon		500		0		0	0	0	0	textures/pharaon.xpm
+knight		600		0		0	0	0	0	textures/knight.xpm
+worker		500		0		0	0	0	0	textures/worker.xpm
+door		500		0		0	0	0	0	textures/door.xpm
+torch		200		300		0	0	0	0	textures/torch.xpm
+fountain	300		-200	0	0	0	0	textures/fountain.xpm
+treasure	500		0		0	0	0	0	textures/treasure.xpm
+throne		500		0		0	0	0	0	textures/throne.xpm
+sand		500		0		0	0	0	0	textures/sand.xpm

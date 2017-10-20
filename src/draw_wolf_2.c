@@ -6,26 +6,11 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/29 13:34:26 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/06 13:17:58 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 19:02:55 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-void	custom_pixel_put(t_image *img, t_pixel p)
-{
-	t_color	*a;
-	float	alpha;
-
-	if (p.x < 0 || p.x >= img->w || p.y < 0 || p.y >= img->h)
-		return ;
-	alpha = (float)p.c.a / 255;
-	a = img->l + (p.y * img->w + p.x);
-	a->r = (1 - alpha) * p.c.r + (alpha * a->r);
-	a->g = (1 - alpha) * p.c.g + (alpha * a->g);
-	a->b = (1 - alpha) * p.c.b + (alpha * a->b);
-	a->a = (1 - alpha) * p.c.a + (alpha * a->a);
-}
 
 int		get_x(t_image *texture, t_entity *ent, t_p p, double angle)
 {
@@ -34,14 +19,16 @@ int		get_x(t_image *texture, t_entity *ent, t_p p, double angle)
 		if (p.y > ent->pos.y)
 			return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
 			* (texture->w - 2) + texture->w / 2);
-		return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
-		* (-texture->w) + texture->w / 2);
+		else
+			return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
+			* (-texture->w) + texture->w / 2);
 	}
 	if (p.y < ent->pos.y)
 		return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
 		* (texture->w - 2) + texture->w / 2);
-	return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
-	* (-texture->w) + texture->w / 2);
+	else
+		return (sqrt(pow(p.x - ent->pos.x, 2) + pow(p.y - ent->pos.y, 2))
+		* (-texture->w) + texture->w / 2);
 }
 
 void	draw_line_2(t_thread *t, t_entity *ent, t_p p, double angle)
@@ -53,19 +40,22 @@ void	draw_line_2(t_thread *t, t_entity *ent, t_p p, double angle)
 	t_pixel	u;
 
 	d = sqrt(pow(p.x - t->env->cam.x, 2) + pow(p.y - t->env->cam.y, 2)) *
-	cos(angle - t->env->cam.angle);
-	m[0] = (d != 0) ? t->env->img->h / 2 - t->env->entities[ent->id].h / d : 0;
-	m[1] = (d != 0) ? t->env->img->h / 2 + t->env->entities[ent->id].h / d : 0;
+	cos(t->env->cam.angle - angle);
+	m[0] = (d != 0) ? t->env->img2->h / 2 - t->env->entities[ent->id].h / d -
+	t->env->entities[ent->id].y / d : 0;
+	m[1] = (d != 0) ? t->env->img2->h / 2 + t->env->entities[ent->id].h / d -
+	t->env->entities[ent->id].y / d : 0;
 	if (!(texture = t->env->entities[ent->id].texture))
 		return ;
 	x = get_x(texture, ent, p, t->env->cam.angle);
 	u.x = t->i;
-	u.y = m[0];
-	while (u.y < m[1])
+	u.y = (m[0] >= 0) ? m[0] : 0;
+	while (u.y < m[1] && u.y < t->env->img2->h)
 	{
 		u.c = texture->l[(int)(texture->h * ((double)(u.y - m[0]) / (m[1] -
 		m[0]))) * texture->w + x];
-		custom_pixel_put(t->env->img, u);
+		if (!u.c.a)
+			smlx_pixel_put(t->env->img2, u);
 		u.y++;
 	}
 }
@@ -93,6 +83,7 @@ void	draw_objects(t_thread *t, t_p max, double angle)
 {
 	t_entity	*entity;
 	t_list		*list;
+	t_p			min;
 	t_p			p;
 
 	list = t->env->map.entities;
@@ -100,12 +91,19 @@ void	draw_objects(t_thread *t, t_p max, double angle)
 		max.x += (cos(angle) > 0) ? t->env->field : -t->env->field;
 	if (max.y == -1)
 		max.y += ((angle) > 0) ? t->env->field : -t->env->field;
+	min.x = 0;
+	min.y = 0;
 	while (list)
 	{
 		entity = (t_entity*)list->content;
 		p = must_draw(t->env, max, entity, angle);
-		if (p.x != -1)
+		if (p.x != -1 && ((!min.x && !min.y) || sqrt(pow(t->env->cam.x - p.x, 2)
+		+ pow(t->env->cam.y - p.y, 2)) < sqrt(pow(t->env->cam.x - min.x, 2) +
+		pow(t->env->cam.y - min.y, 2))))
+		{
 			draw_line_2(t, entity, p, angle);
+			min = p;
+		}
 		list = list->next;
 	}
 }

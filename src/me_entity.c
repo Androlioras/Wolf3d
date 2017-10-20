@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/29 14:50:53 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 14:59:58 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 17:47:00 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ char	map_remove_entity(t_map *map, char **instruct)
 	int		id;
 	int		i;
 
+	if (!map->magic)
+		return (ft_error(4));
 	list = map->entities;
 	id = ft_atoi(instruct[1]);
 	i = 0;
@@ -54,16 +56,16 @@ char	map_remove_entity(t_map *map, char **instruct)
 	{
 		prev = list;
 		list = list->next;
+		i++;
 	}
-	if (list && i == id)
-	{
-		if (list == map->entities)
-			map->entities = list->next;
-		else
-			prev->next = list->next;
-		free(list->content);
-		free(list);
-	}
+	if (!list || i != id)
+		return (1);
+	if (list == map->entities)
+		map->entities = list->next;
+	else
+		prev->next = list->next;
+	free(list->content);
+	free(list);
 	return (0);
 }
 
@@ -71,6 +73,8 @@ char	map_add_entity(t_map *map, char **instruct)
 {
 	t_entity	entity;
 
+	if (!map->magic)
+		return (ft_error(4));
 	entity.pos.x = ft_atod(instruct[1]) - 1;
 	entity.pos.y = ft_atod(instruct[2]) - 1;
 	entity.angle = (ft_atoi(instruct[3]) * 2 * PI) / 360;

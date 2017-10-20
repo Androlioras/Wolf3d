@@ -1,4 +1,4 @@
-NAME = Wolf3d
+NAME = wolf3d
 NAME2 = map_editor
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
@@ -17,7 +17,6 @@ SRCS =	main.c\
 		load_map.c\
 		load_blocks.c\
 		load_entities.c\
-		menu.c\
 		move.c
 SRCS2 =	map_editor.c\
 		me_errors.c\

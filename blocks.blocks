@@ -1,6 +1,10 @@
-air			0	0	0	255	255	NULL
-stone		500	64	64	64	0	textures/stone.xpm
-glass		500	255	255	0	0	textures/glass.xpm
-wood		500	0	255	255	0	textures/wood.xpm
-unicorn		500	0	255	255	0	textures/unicorn_2.xpm
-salameche	500	0	0	0	0	textures/salameche.xpm
+air			0		0	0	255	255	NULL
+stone		500		64	64	64	0	textures/stone.xpm
+glass		500		255	255	0	0	textures/glass.xpm
+dark_stone	500		0	0	0	0	textures/dark_stone.xpm
+unicorn		500		0	255	255	0	textures/unicorn_2.xpm
+salameche	500		0	0	0	0	textures/salameche.xpm
+metal		500		255	255	255	0	textures/metal.xpm
+sand		500		255	255	0	0	textures/sand.xpm
+brick		500		255	0	0	0	textures/brick.xpm
+wood		500		0	255	255	0	textures/wood.xpm

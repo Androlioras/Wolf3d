@@ -38,7 +38,7 @@ $(NAME): $(OBJS)
 
 %.o: $(SRC)/%.c
 	@echo "\033[0m\033[46m\033[37m\033[1m[libsmlx]\033[0m\033[40m\033[33m making '$@'\033[0m"
-	@$(CC) $(FLAGS) -I $(INCLUDE) -I $(LIBFT)/includes -c $^
+	@$(CC) $(FLAGS) -I $(INCLUDE) -I $(LIBFT) -c $^
 
 clean:
 	@echo "\033[0m\033[46m\033[37m\033[1m[libsmlx]\033[0m\033[40m\033[36m cleaning objects"

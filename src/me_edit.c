@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/29 10:27:02 by pribault          #+#    #+#             */
-/*   Updated: 2017/05/29 12:08:44 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 11:51:18 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	map_set_line(t_map *map, char **instruct)
 	t_point	i;
 	int		y;
 
+	if (!map->magic)
+		return (ft_error(4));
 	a.x = ft_atoi(instruct[1]);
 	a.y = ft_atoi(instruct[2]);
 	b.x = ft_atoi(instruct[3]);
@@ -55,6 +57,8 @@ char	map_set_block(t_map *map, char **instruct)
 	int		x;
 	int		y;
 
+	if (!map->magic)
+		return (ft_error(4));
 	x = ft_atoi(instruct[1]);
 	y = ft_atoi(instruct[2]);
 	if (x > 0 && y > 0 && x <= map->w && y <= map->h)

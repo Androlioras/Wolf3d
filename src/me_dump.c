@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/29 10:27:02 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 14:59:42 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/08 17:02:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,16 @@ char	map_dump(t_map *map, char **instruct)
 	if (!map->magic)
 		return (ft_error(4));
 	instruct++;
+	dump_entities(map);
+	ft_printf("\n     ", (j = 0));
+	while (j < map->w)
+		ft_printf("%.2d ", ++j);
+	ft_putchar('\n');
 	i = 0;
 	while (i < map->h)
 	{
 		j = 0;
-		ft_putstr("  ");
+		ft_printf("%.3d  ", i + 1);
 		while (j < map->w)
 		{
 			ft_printf("\033[38;5;%dm%.2x ", map->map[i][j], map->map[i][j]);
@@ -54,6 +59,5 @@ char	map_dump(t_map *map, char **instruct)
 		ft_putstr("\n\033[0m");
 		i++;
 	}
-	dump_entities(map);
 	return (0);
 }

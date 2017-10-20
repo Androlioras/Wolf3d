@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 12:49:52 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 17:45:06 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 18:20:40 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@
 # include <pthread.h>
 # include <stdio.h>
 
-# define MAGIC	0x42424242
+# define MAGIC			0x42424242
+# define PLAYER_SPEED	0.05
+# define CAM_SPEED		0.05
+# define SHADOWS		1.3
 
 typedef struct	s_map
 {
@@ -42,6 +45,15 @@ typedef struct	s_block
 	t_image		*texture;
 }				t_block;
 
+typedef struct	s_ent
+{
+	char		*name;
+	int			h;
+	int			y;
+	t_color		color;
+	t_image		*texture;
+}				t_ent;
+
 typedef struct	s_entity
 {
 	t_uchar		id;
@@ -51,14 +63,13 @@ typedef struct	s_entity
 
 typedef struct	s_env
 {
-	t_uchar		where;
 	t_win		win;
 	t_image		*img;
 	t_image		*back;
 	t_image		*sky;
-	t_image		*buttons;
+	t_image		*img2;
 	t_block		*blocks;
-	t_block		*entities;
+	t_ent		*entities;
 	t_map		map;
 	t_camera	cam;
 	t_uchar		threads;

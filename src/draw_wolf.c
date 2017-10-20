@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/22 17:40:11 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 17:45:13 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 17:05:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void	draw_line(t_env *env, t_point n, t_p b, t_pixel *p)
 	{
 		y = texture->h * (p[0].y - ym[0]) / (ym[1] - ym[0]);
 		p[0].c = texture->l[y * texture->w + x];
+		if ((fabs(b.x - (int)b.x) == 0.5 && b.x > n.x) ||
+		(fabs(b.y - (int)b.y) == 0.5 && b.y > n.y))
+			p[0].c = smlx_create_color(p[0].c.r / SHADOWS, p[0].c.g / SHADOWS,
+			p[0].c.b / SHADOWS, p[0].c.a);
 		smlx_pixel_put(env->img, p[0]);
 		p[0].y++;
 	}
@@ -81,7 +85,9 @@ t_p		find_vertical(t_env *env, double angle)
 		t.x = (cos(angle) > 0) ? (int)(p.x + 0.5) : (int)(p.x - 0.5);
 		if (t.x < env->map.w && t.y < env->map.h && t.x >= 0 && t.y >= 0 &&
 		env->map.map[t.y][t.x])
-			return (p);
+			if (p.y >= -0.5 && p.x >= -0.5 && p.y < env->map.h + 0.5 && p.x <
+			env->map.w + 0.5)
+				return (p);
 		p.x += (p.x < max) ? 1 : -1;
 	}
 	p.x = -1;
@@ -104,7 +110,9 @@ t_p		find_horizontal(t_env *env, double angle)
 		t.y = (sin(angle) > 0) ? (int)(p.y + 0.5) : (int)(p.y - 0.5);
 		if (t.y < env->map.h && t.x < env->map.w && t.y >= 0 && t.x >= 0 &&
 		env->map.map[t.y][t.x])
-			return (p);
+			if (p.y >= -0.5 && p.x >= -0.5 && p.y < env->map.h + 0.5 && p.x <
+			env->map.w + 0.5)
+				return (p);
 		p.y += (p.y < max) ? 1 : -1;
 	}
 	p.x = -1;

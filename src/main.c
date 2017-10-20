@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 12:41:13 by pribault          #+#    #+#             */
-/*   Updated: 2017/06/05 16:07:17 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 18:58:28 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 int		ft_exit(t_env *env, int k)
 {
-	if (env->where & 0x20)
-		destroy_menu(env);
 	free_map(env);
 	free_blocks(env);
 	free_entities(env);
 	smlx_destroy_image(&env->win, &env->img);
+	smlx_destroy_image(&env->win, &env->img2);
+	smlx_destroy_image(&env->win, &env->back);
+	smlx_destroy_image(&env->win, &env->sky);
 	smlx_destroy_window(&env->win);
 	exit(k);
 	return (0);
@@ -68,9 +69,9 @@ void	draw_background(t_env *env)
 void	init(t_env *env)
 {
 	env->img = smlx_new_image(&env->win, env->win.w, env->win.h);
+	env->img2 = smlx_new_image(&env->win, env->win.w, env->win.h);
 	env->back = smlx_new_image(&env->win, env->win.w, env->win.h);
 	env->sky = smlx_new_image_xpm(&env->win, "textures/sky.xpm");
-	env->where = 1;
 	env->cam.x = 2;
 	env->cam.y = 2;
 	env->cam.angle = 0;

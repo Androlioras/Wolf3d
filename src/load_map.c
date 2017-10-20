@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/21 15:21:11 by pribault          #+#    #+#             */
-/*   Updated: 2017/05/29 14:42:50 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 17:18:45 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,43 @@ void	fill_map(t_env *env, int fd)
 		ft_lstadd(&env->map.entities, ft_lstnew(&entity, sizeof(t_entity)));
 }
 
+void	verify_entities(t_env *env)
+{
+	t_list	*list;
+	int		entities;
+
+	entities = 0;
+	while (env->entities[entities].name)
+		entities++;
+	list = env->map.entities;
+	while (list)
+	{
+		if (((t_entity*)list->content)->id >= entities)
+			exit(1);
+		list = list->next;
+	}
+}
+
+void	verify_map(t_env *env)
+{
+	int		blocks;
+	int		i[2];
+
+	blocks = 0;
+	while (env->blocks[blocks].name)
+		blocks++;
+	i[0] = 0;
+	while (i[0] < env->map.h)
+	{
+		i[1] = 0;
+		while (i[1] < env->map.w)
+			if (env->map.map[i[0]][i[1]++] >= blocks)
+				exit(1);
+		i[0]++;
+	}
+	verify_entities(env);
+}
+
 void	load_map(t_env *env, char *name)
 {
 	static char	*map;
@@ -55,7 +92,7 @@ void	load_map(t_env *env, char *name)
 		map = name;
 	file = ft_joinf("%s.w3d", map);
 	if ((fd = open(file, O_RDONLY)) < 0)
-		ft_exit(env, 1);
+		exit(1);
 	free(file);
 	if ((read(fd, &magic, sizeof(t_uint))) == sizeof(t_uint) &&
 	magic == MAGIC && (read(fd, &env->map.w, sizeof(int))) == sizeof(int) &&
@@ -67,4 +104,5 @@ void	load_map(t_env *env, char *name)
 	env->cam.x = spawn.x - 1;
 	env->cam.y = spawn.y - 1;
 	close(fd);
+	verify_map(env);
 }

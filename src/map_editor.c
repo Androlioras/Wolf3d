@@ -6,14 +6,15 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/29 10:27:02 by pribault          #+#    #+#             */
-/*   Updated: 2017/05/29 15:27:26 by pribault         ###   ########.fr       */
+/*   Updated: 2017/06/12 14:05:25 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map_editor.h"
 
-t_instruct	g_instruct[] =
+t_instruct	*get_instructs(void)
 {
+	static t_instruct	instructs[] = {
 	{"create", &map_create, 3},
 	{"push", &map_push, 0},
 	{"rm", &map_rm, 1},
@@ -28,22 +29,29 @@ t_instruct	g_instruct[] =
 	{"help", &map_help, 0},
 	{"exit", &map_exit, 0},
 	{NULL, NULL, 0}
-};
+	};
 
-void	execute_instruction(t_map *map, char **instruct)
+	return (instructs);
+}
+
+void		execute_instruction(t_map *map, char **instruct,
+			t_instruct *instructs)
 {
-	t_uchar	i;
+	t_uchar		i;
 
 	i = 0;
-	while (g_instruct[i].name)
+	instructs = get_instructs();
+	if (!instruct || !instruct[0])
+		return ;
+	while (instructs[i].name)
 	{
-		if (!ft_strcmp(instruct[0], g_instruct[i].name))
+		if (!ft_strcmp(instruct[0], instructs[i].name))
 		{
-			if (ft_arraylen(instruct) == g_instruct[i].args + 1)
-				g_instruct[i].fct(map, instruct);
+			if (ft_arraylen(instruct) == instructs[i].args + 1)
+				instructs[i].fct(map, instruct);
 			else
 				ft_printf("error: %s need %d arguments\n", instruct[0],
-				g_instruct[i].args);
+				instructs[i].args);
 			return ;
 		}
 		i++;
@@ -51,18 +59,20 @@ void	execute_instruction(t_map *map, char **instruct)
 	ft_printf("instruction %s not recognized\n", instruct[0]);
 }
 
-int		main(void)
+int			main(void)
 {
-	t_map	map;
-	char	**instruct;
-	char	*line;
+	t_instruct	*instructs;
+	t_map		map;
+	char		**instruct;
+	char		*line;
 
 	ft_bzero(&map, sizeof(t_map));
+	instructs = get_instructs();
 	ft_putstr("$> ");
 	while (ft_get_next_line(0, &line))
 	{
 		instruct = ft_strsplit(line, ' ');
-		execute_instruction(&map, instruct);
+		execute_instruction(&map, instruct, instructs);
 		ft_free_array((void**)instruct, ft_arraylen(instruct) + 1);
 		free(line);
 		ft_putstr("$> ");
